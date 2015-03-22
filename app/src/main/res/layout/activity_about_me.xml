@@ -34,8 +34,10 @@
             android:layout_height="wrap_content"
             android:text="www.androidthai.in.ih"
             android:id="@+id/textView4"
+            android:onClick="clickWeb"
             android:textSize="@dimen/h2"
             android:layout_gravity="center_horizontal"
-            android:textColor="@color/text" />
+            android:textColor="@color/text"
+            android:clickable="true" />
     </LinearLayout>
 </RelativeLayout>

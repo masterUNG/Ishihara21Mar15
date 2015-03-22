@@ -1,9 +1,12 @@
 package appewtc.masterung.ishihara21mar15;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 
 public class AboutMeActivity extends ActionBarActivity {
@@ -12,6 +15,12 @@ public class AboutMeActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about_me);
+    }
+
+    public void clickWeb(View view) {
+        Intent objIntent = new Intent(Intent.ACTION_VIEW);
+        objIntent.setData(Uri.parse("http://androidthai.in.th"));
+        startActivity(objIntent);
     }
 
 
