@@ -1,5 +1,6 @@
 package appewtc.masterung.ishihara21mar15;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -22,7 +23,8 @@ public class MainActivity extends ActionBarActivity {
     private RadioGroup ragChoice;
     private RadioButton radChoice1, radChoice2, radChoice3, radChoice4;
     private Button btnAnswer;
-    private int intRadio;
+    private int intRadio, intIndex, intScore;
+    private MyModel objMyModel;
 
 
     @Override
@@ -39,7 +41,50 @@ public class MainActivity extends ActionBarActivity {
         //Create Radio Controller
         radioController();
 
+        //Receive Interface
+        receiveInterface();
+
     }   // onCreate
+
+    private void receiveInterface() {
+        objMyModel = new MyModel();
+        objMyModel.setOnMyModelChangeListener(new MyModel.OnMyModelChangeListener() {
+            @Override
+            public void onMyModelChangeListener(MyModel myModel) {
+
+                //Change View
+                changeView(myModel.getIntButton());
+
+            }   // event
+        });
+    }   // receiveInterface
+
+    private void changeView(int intButton) {
+
+        //Change Image
+        int intImage[] = new int[]{R.drawable.ishihara_01, R.drawable.ishihara_02,
+                R.drawable.ishihara_03, R.drawable.ishihara_04,
+                R.drawable.ishihara_05, R.drawable.ishihara_06,
+                R.drawable.ishihara_07, R.drawable.ishihara_08,
+                R.drawable.ishihara_09, R.drawable.ishihara_10};
+
+        imvIshihara.setImageResource(intImage[intButton]);
+
+        //Change Choice
+        int intTimes[] = new int[]{R.array.times1, R.array.times2,
+                R.array.times3, R.array.times4,
+                R.array.times5, R.array.times6,
+                R.array.times7, R.array.times8,
+                R.array.times9, R.array.times10};
+        String strChoice[] = new String[4];
+        strChoice = getResources().getStringArray(intTimes[intButton]);
+        radChoice1.setText(strChoice[0]);
+        radChoice2.setText(strChoice[1]);
+        radChoice3.setText(strChoice[2]);
+        radChoice4.setText(strChoice[3]);
+    }   // changeView
+
+
 
     private void radioController() {
         ragChoice.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -94,10 +139,41 @@ public class MainActivity extends ActionBarActivity {
             Toast.makeText(MainActivity.this, "กรุณาตอบคำถาม นะคะ", 5000).show();
         } else {
 
-            
+            //Check Score
+            checkScore();
+
+            //Check Times
+            checkTimes();
 
         }
     }   // checkAnswer
+
+    private void checkScore() {
+        int intAnswer[] = new int[]{1, 2, 3, 1, 2, 3, 1, 2, 4, 4};
+        int intUser[] = new int[10];
+        intUser[intIndex] = intRadio;
+        if (intUser[intIndex] == intAnswer[intIndex]) {
+            intScore++;
+        }
+    }   // checkScore
+
+    private void checkTimes() {
+        if (intIndex == 9) {
+            //Intent to ShowScore
+            Intent objIntent = new Intent(MainActivity.this, ShowScoreActivity.class);
+            objIntent.putExtra("Score", intScore);
+            startActivity(objIntent);
+            finish();
+        } else {
+            //Call View
+            txtQuestion.setText(Integer.toString(intIndex + 2) + ". What is this ?");
+            intIndex += 1;
+
+            //Call Model
+            objMyModel.setIntButton(intIndex);
+
+        }
+    }   // checkTimes
 
     private void initialWidget() {
         txtQuestion = (TextView) findViewById(R.id.textView2);
